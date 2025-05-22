@@ -48,3 +48,9 @@ Por que isso é importante?
 Detalhe: Sua aplicação não se limita a apenas streaming de mídia, também podem ser utilizados para comunicação entre processos dentro do Sistema Operacional, dentre outras aplicações.
 
 Existem dois tipos principais de streams, a Readable Stream e a Writable Stream, a primeira é utilizada quando queremos ler dados de uma fonte e a segunda é quando queremos enviar dados para algum destino
+
+No Node.js uma requisição HTTP é uma Readable Stream, enquanto a resposta HTPP é uma Writable Stream.
+
+### Pipe
+
+O pipe é uma forma de conectar duas streams, normalmente ligando uma Readable Stream ligada a uma Writable Stream.

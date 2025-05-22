@@ -5,7 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts"
+    "server": "tsx watch src/server.ts",
+    "streams": "tsx streams/fundamentals.ts"
   },
   "repository": {
     "type": "git",

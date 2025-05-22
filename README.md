@@ -26,3 +26,12 @@ Exemplos:
 - GET /produtos/:id => Busca o produto com um determinado id
 - PUT /produtos/:id => Atualiza o produto com um determinado id
 - DELETE /produtos/:id => Deleta um produto com um determinado id
+
+## Cabeçalhos HTTP
+
+Permitem passar informações adicionais, é constituído por nome seguindo de dois pontos (:) seu valor.
+
+Exemplos:
+
+-Content-Type: application/json (É responsável por informar que resposta que esta sendo enviada esta em formato JSON).
+-Access-Control-Allow-Origin": \* (É responsável por dizer quais os domínios que podem acessar um determinado recurso, nesse caso está permitindo com que qualquer domínio possa acessar um determinado recurso).

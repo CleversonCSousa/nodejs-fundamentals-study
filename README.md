@@ -35,3 +35,16 @@ Exemplos:
 
 -Content-Type: application/json (É responsável por informar que resposta que esta sendo enviada esta em formato JSON).
 -Access-Control-Allow-Origin": \* (É responsável por dizer quais os domínios que podem acessar um determinado recurso, nesse caso está permitindo com que qualquer domínio possa acessar um determinado recurso).
+
+## Streams
+
+Streams ou fluxos de dados é uma maneira que temos de processar dados antes mesmo que todos os dados estejam prontos, ou seja realizamos a escrita ou leitura de dados parcialmente, a medida que precisamos deles, isso é muito utilizado por exemplo em plataforma de streaming, onde o usuário não precisa necessariamente baixar todo o vídeo, ele pode simplesmente ir fazendo o download de chuncks (nome que se dá aos pequenos pacotes que são enviados sob demanda).
+
+Por que isso é importante?
+
+- Evita de travar toda a memória principal.
+- Melhora a experiência do usuário, pois ele não precisa esperar muito tempo para acessar um recurso (desde que não precisamos de todo o recurso, como video).
+
+Detalhe: Sua aplicação não se limita a apenas streaming de mídia, também podem ser utilizados para comunicação entre processos dentro do Sistema Operacional, dentre outras aplicações.
+
+Existem dois tipos principais de streams, a Readable Stream e a Writable Stream, a primeira é utilizada quando queremos ler dados de uma fonte e a segunda é quando queremos enviar dados para algum destino

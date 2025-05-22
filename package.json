@@ -1,0 +1,28 @@
+{
+  "name": "fundamentals",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CleversonCSousa/nodejs-fundamentals-study.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CleversonCSousa/nodejs-fundamentals-study/issues"
+  },
+  "homepage": "https://github.com/CleversonCSousa/nodejs-fundamentals-study#readme",
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "tsx": "^4.19.4"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0"
+  }
+}

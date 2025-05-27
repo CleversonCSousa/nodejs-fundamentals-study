@@ -3,19 +3,18 @@
 import { Readable, Transform, Writable } from "node:stream";
 import { TransformCallback } from "stream";
 
-
 class OneToHundredStream extends Readable {
   index = 1;
-  
+
   _read() {
     const i = this.index++;
-    
+
     setTimeout(() => {
       if (i > 100) {
         this.push(null);
       } else {
         const buf = Buffer.from(i.toString());
-        
+
         this.push(buf + " ");
       }
     }, 1000);
@@ -23,20 +22,28 @@ class OneToHundredStream extends Readable {
 }
 
 class InverseNumberStream extends Transform {
-  _transform(chunk: Buffer, encoding: BufferEncoding, callback: TransformCallback): void {
-      const transformed = Number(chunk.toString()) * -1;
+  _transform(
+    chunk: Buffer,
+    encoding: BufferEncoding,
+    callback: TransformCallback
+  ): void {
+    const transformed = Number(chunk.toString()) * -1;
 
-      callback(null, Buffer.from(transformed.toString()));
+    callback(null, Buffer.from(transformed.toString()));
   }
 }
 
 class MultiplyByTenStream extends Writable {
-  _write(chunk: Buffer, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
-      console.log(Number(chunk.toString()) * 10);
-      callback();
+  _write(
+    chunk: Buffer,
+    encoding: BufferEncoding,
+    callback: (error?: Error | null) => void
+  ): void {
+    console.log(Number(chunk.toString()) * 10);
+    callback();
   }
 }
 
 new OneToHundredStream()
   .pipe(new InverseNumberStream())
-  .pipe(new MultiplyByTenStream())
+  .pipe(new MultiplyByTenStream());

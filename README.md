@@ -54,3 +54,7 @@ No Node.js uma requisição HTTP é uma Readable Stream, enquanto a resposta HTP
 ### Pipe
 
 O pipe é uma forma de conectar duas streams, normalmente ligando uma Readable Stream ligada a uma Writable Stream.
+
+## Buffers
+
+Buffer é uma região da memória utilizada para armazenar temporariamente dados enquanto eles estão sendo transferidos entre dois dispositivos ou processos. Ele permite que a transmissão de dados ocorra de forma mais eficiente e contínua, especialmente quando há uma diferença de velocidade entre o produtor e o consumidor dos dados.

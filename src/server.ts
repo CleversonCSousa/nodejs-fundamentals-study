@@ -1,42 +1,43 @@
 import { config } from "dotenv";
+import { IncomingMessage } from "node:http";
 config();
 import http from "node:http";
 import { mockUsers as users } from "./users.js";
 const port = process.env.PORT || 3000;
 
-interface User {
-  name: string;
-  age: number;
+interface RequestWithBody extends IncomingMessage {
+  body?: any;
 }
 
-const server = http.createServer((request, response) => {
+const server = http.createServer(async (request: RequestWithBody, response) => {
   response.setHeader("Content-Type", "application/json");
   response.setHeader("Access-Control-Allow-Origin", "*");
 
   const { method, url } = request;
+  const buffers = [];
+  for await (const chunk of request) {
+    buffers.push(chunk);
+  }
+
+  try {
+    request.body = JSON.parse(Buffer.concat(buffers).toString());
+  } catch (err) {
+    request.body = null;
+  }
+
   if (method === "GET" && url === "/users") {
     return response.end(JSON.stringify(users));
   }
 
   if (method === "POST" && url === "/users") {
-    let body = "";
-    request.on("data", (chunk) => {
-      body += chunk;
+    const { name, age } = request.body;
+
+    users.push({
+      name,
+      age,
     });
 
-    request.on("end", () => {
-      try {
-        const user: User = JSON.parse(body);
-        users.push(user);
-        return response
-          .writeHead(201)
-          .end(JSON.stringify({ message: "Usuário criado", user }));
-      } catch {
-        return response
-          .writeHead(400)
-          .end(JSON.stringify({ error: "JSON inválido" }));
-      }
-    });
+    return response.writeHead(201).end();
   }
 
   return;

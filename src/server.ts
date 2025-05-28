@@ -1,10 +1,11 @@
 import { config } from "dotenv";
+import { randomUUID } from "node:crypto";
 import { IncomingMessage, ServerResponse } from "node:http";
-config();
-import http from "node:http";
 import { json } from "./middlewares/json.js";
 import { Database } from "./database.js";
 import { User } from "./User.js";
+config();
+import http from "node:http";
 const port = process.env.PORT || 3000;
 
 interface RequestWithBody extends IncomingMessage {
@@ -28,6 +29,7 @@ const server = http.createServer(
       const { name, age } = request.body;
 
       database.insert<User>("users", {
+        id: randomUUID(),
         age,
         name,
       });

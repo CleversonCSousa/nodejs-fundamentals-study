@@ -2,6 +2,7 @@ import { IncomingMessage, ServerResponse } from "http";
 import { Database } from "./database.js";
 import { User } from "./User.js";
 import { randomUUID } from "crypto";
+import { buildRoutePath } from "./utils/build-route-path.js";
 
 const database = new Database();
 interface RequestWithBody<T = any> extends IncomingMessage {
@@ -10,7 +11,7 @@ interface RequestWithBody<T = any> extends IncomingMessage {
 
 interface Route<T = any> {
   method: "GET" | "POST" | "PUT" | "DELETE";
-  path: string;
+  path: RegExp;
   handler: (
     request: IncomingMessage | RequestWithBody<T>,
     response: ServerResponse
@@ -20,7 +21,7 @@ interface Route<T = any> {
 export const routes: Route[] = [
   {
     method: "GET",
-    path: "/users",
+    path: buildRoutePath("/users"),
     handler: (request, response) => {
       const users = database.select<User>("users");
       return response.end(JSON.stringify(users));
@@ -28,7 +29,7 @@ export const routes: Route[] = [
   },
   {
     method: "POST",
-    path: "/users",
+    path: buildRoutePath("/users"),
     handler: (
       request: RequestWithBody<{ name: string; age: number }>,
       response
@@ -44,7 +45,7 @@ export const routes: Route[] = [
   },
   {
     method: "DELETE",
-    path: "/users/1",
+    path: buildRoutePath("/users/:id"),
     handler: (request: RequestWithBody<{ id: string }>, response) => {
       return response.end();
     },

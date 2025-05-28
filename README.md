@@ -58,3 +58,18 @@ O pipe é uma forma de conectar duas streams, normalmente ligando uma Readable S
 ## Buffers
 
 Buffer é uma região da memória utilizada para armazenar temporariamente dados enquanto eles estão sendo transferidos entre dois dispositivos ou processos. Ele permite que a transmissão de dados ocorra de forma mais eficiente e contínua, especialmente quando há uma diferença de velocidade entre o produtor e o consumidor dos dados.
+
+## Middleware
+
+Middleware é uma função que intercepta requisições HTTP, executa uma lógica específica, pode modificar os dados e decidir se a requisição deve continuar no fluxo ou ser encerrada.
+Exemplos:
+
+- Autenticação de usuário
+- Tratamento de erros
+- Processamento ou formatação de arquivos.
+
+## Route e Query parameters
+
+- Query Parameters: Usados normalmente em filtragem, paginação, podemos passar um query parameter da seguinte forma /?chave=valor&outraChave=outroValor
+- Route Parameters: Dados que fazem parte da própria URL que são posicionados em segmentos fixos da rota, podemos usar /users/:id, onde :id é o parâmetro
+- Request Body: Dados que são enviados dentro do corpo da requisição HTTP, pode ter diversos formados, sendo o mais comum JSON. É usado principlamente para enviar dados mais complexos como por exemplo dados de um formulário

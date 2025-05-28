@@ -4,7 +4,7 @@ const databasePath = new URL("db.json", import.meta.url);
 
 export class Database {
   private database: Record<string, unknown[]> = {};
-  private constructor() {
+  public constructor() {
     fs.readFile(databasePath, "utf8")
       .then((data) => {
         this.database = JSON.parse(data);

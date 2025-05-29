@@ -3,19 +3,14 @@ import { Database } from "./database.js";
 import { User } from "./User.js";
 import { randomUUID } from "crypto";
 import { buildRoutePath } from "./utils/build-route-path.js";
-
+import { RequestWithBody } from "./Request.js";
+import { RequestWithParams } from "./Request.js";
 const database = new Database();
-interface RequestWithBody<T = any> extends IncomingMessage {
-  body?: T;
-}
 
 interface Route<T = any> {
   method: "GET" | "POST" | "PUT" | "DELETE";
   path: RegExp;
-  handler: (
-    request: IncomingMessage | RequestWithBody<T>,
-    response: ServerResponse
-  ) => void;
+  handler: (request: RequestWithBody<T>, response: ServerResponse) => void;
 }
 
 export const routes: Route[] = [
@@ -31,14 +26,17 @@ export const routes: Route[] = [
     method: "POST",
     path: buildRoutePath("/users"),
     handler: (
-      request: RequestWithBody<{ name: string; age: number }>,
+      request: RequestWithBody<{ name: string; email: string }>,
       response
     ) => {
-      const { name, age } = request.body!;
+      if (!request.body) {
+        return response.writeHead(400).end("Missing body");
+      }
+      const { name, email } = request.body;
       database.insert<User>("users", {
         id: randomUUID(),
         name,
-        age,
+        email,
       });
       return response.writeHead(201).end();
     },
@@ -46,8 +44,35 @@ export const routes: Route[] = [
   {
     method: "DELETE",
     path: buildRoutePath("/users/:id"),
-    handler: (request: RequestWithBody<{ id: string }>, response) => {
-      return response.end();
+    handler: (request: RequestWithParams<{ id: string }>, response) => {
+      if (!request.params) {
+        {
+          return response.writeHead(400).end("Missing params");
+        }
+      }
+      const { id } = request.params;
+      database.delete("users", id);
+      return response.writeHead(204).end();
+    },
+  },
+  {
+    method: "PUT",
+    path: buildRoutePath("/users/:id"),
+    handler: (
+      request: RequestWithBody<{ name: string; email: string }> &
+        RequestWithParams<{ id: string }>,
+      response
+    ) => {
+      if (!request.params) {
+        return response.writeHead(400).end("Missing params");
+      }
+      if (!request.body) {
+        return response.writeHead(400).end("Missing body");
+      }
+      const { id } = request.params;
+      const { name, email } = request.body;
+      database.update("users", id, { name, email });
+      return response.writeHead(204).end();
     },
   },
 ];

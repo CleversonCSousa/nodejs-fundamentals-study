@@ -33,4 +33,34 @@ export class Database {
 
     return data;
   }
+
+  public delete(table: string, id: string) {
+    const tableData = this.database[table];
+
+    if (Array.isArray(tableData)) {
+      const rowIndex = (tableData as { id: string }[]).findIndex(
+        (row) => row.id === id
+      );
+
+      if (rowIndex > -1) {
+        tableData.splice(rowIndex, 1);
+        this.persist();
+      }
+    }
+  }
+
+  public update<T>(table: string, id: string, data: Omit<T, "id">) {
+    const tableData = this.database[table];
+
+    if (Array.isArray(tableData)) {
+      const rowIndex = (tableData as { id: string }[]).findIndex(
+        (row) => row.id === id
+      );
+
+      if (rowIndex > -1) {
+        tableData[rowIndex] = { id, ...data };
+        this.persist();
+      }
+    }
+  }
 }

@@ -4,26 +4,27 @@ import { json } from "./middlewares/json.js";
 config();
 import http from "node:http";
 import { routes } from "./routes.js";
+import { RequestWithBody, RequestWithParams } from "./Request.js";
 const port = process.env.PORT || 3000;
 
-interface RequestWithBody<T = any> extends IncomingMessage {
-  body?: T;
-}
-
 const server = http.createServer(
-  async (request: RequestWithBody, response: ServerResponse) => {
+  async (
+    request: RequestWithBody & RequestWithParams,
+    response: ServerResponse
+  ) => {
     const { method, url } = request;
 
     await json(request, response);
 
     const route = routes.find((route) => {
-      const routeParams = url?.match(route.path);
-      console.log(routeParams);
-
       return route.method === method && route.path.test(url ?? "");
     });
 
     if (route) {
+      const routeParams = url?.match(route.path);
+
+      request.params = { ...routeParams?.groups };
+
       return route?.handler(request, response);
     }
 

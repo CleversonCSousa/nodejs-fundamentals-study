@@ -3,14 +3,14 @@ import { Database } from "./database.js";
 import { User } from "./User.js";
 import { randomUUID } from "crypto";
 import { buildRoutePath } from "./utils/build-route-path.js";
-import { RequestWithBody } from "./Request.js";
+import { RequestFull, RequestWithBody } from "./Request.js";
 import { RequestWithParams } from "./Request.js";
 const database = new Database();
 
-interface Route<T = any> {
+interface Route<T = any, U = any, V = any> {
   method: "GET" | "POST" | "PUT" | "DELETE";
   path: RegExp;
-  handler: (request: RequestWithBody<T>, response: ServerResponse) => void;
+  handler: (request: RequestFull<T, U, V>, response: ServerResponse) => void;
 }
 
 export const routes: Route[] = [
@@ -18,7 +18,17 @@ export const routes: Route[] = [
     method: "GET",
     path: buildRoutePath("/users"),
     handler: (request, response) => {
-      const users = database.select<User>("users");
+      const { search } = request.query;
+
+      const users = database.select(
+        "users",
+        search
+          ? {
+              name: search,
+              email: search,
+            }
+          : null
+      );
       return response.end(JSON.stringify(users));
     },
   },

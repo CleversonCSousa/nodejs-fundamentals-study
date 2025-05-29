@@ -18,8 +18,24 @@ export class Database {
     fs.writeFile(databasePath, JSON.stringify(this.database));
   }
 
-  public select<T>(table: string): T[] {
-    const data = this.database[table] ?? [];
+  public select<T>(
+    table: string,
+    search?: string | Record<string, any> | null
+  ): T[] {
+    let data = this.database[table] ?? [];
+
+    if (search) {
+      data = data.filter((row) => {
+        return Object.entries(search).some(([key, value]) => {
+          if (typeof value !== "string") return false;
+          return (
+            String((row as Record<string, any>)[key]).toLowerCase() ===
+            value.toLowerCase()
+          );
+        });
+      });
+    }
+
     return data as T[];
   }
 

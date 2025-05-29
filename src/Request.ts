@@ -7,3 +7,11 @@ export interface RequestWithBody<T = any> extends IncomingMessage {
 export interface RequestWithParams<T = any> extends IncomingMessage {
   params?: T;
 }
+
+export interface RequestWithQuery<T = any> extends IncomingMessage {
+  query?: T;
+}
+
+export type RequestFull<T = any, U = any, V = any> = RequestWithBody<T> &
+  RequestWithParams<U> &
+  RequestWithQuery<V>;
